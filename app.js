@@ -23,17 +23,17 @@ const cleanData = () => {
 };
 
 const editPost = index => {
-  const editeblePost = state.posts[index];
-  state.editPost = editeblePost;
+  const editablePost = state.posts[index];
+  state.editPost = editablePost;
 
   postTitle.value = state.editPost.title;
   postBody.value = state.editPost.body;
 };
 
 const deletePost = index => {
-  const editeblePost = state.posts[index];
+  const editablePost = state.posts[index];
 
-  removePostRequest(editeblePost.id);
+  removePostRequest(editablePost.id);
 
   state.posts.splice(index, 1);
 
@@ -41,9 +41,9 @@ const deletePost = index => {
 };
 
 const createPost = (post, index) => `
-  <div class="post">
+  <li class="post">
     <div class="post__wrapper">
-      <h1 class="wrapper__title">${post.title}</h1>
+      <h3 class="wrapper__title">${post.title}</h3>
       <div class="wrapper__body">${post.body}</div>
     </div>
 
@@ -51,7 +51,7 @@ const createPost = (post, index) => `
       <button class="buttons__edit" onclick="editPost(${index})">Edit</button>
       <button class="buttons__delete" onclick="deletePost(${index})">Delete</button>
     </div>
-  </div>
+  </li>
 `;
 
 const fillPostList = posts => {
@@ -63,24 +63,26 @@ const fillPostList = posts => {
 };
 
 postTitle.addEventListener('change', e => {
-  if (!!state.editPost.title) {
-    return (state.editPost.title = e.target.value);
+  if (state.editPost.title) {
+    state.editPost.title = e.target.value;
+    return;
   }
 
-  return (state.newPost.title = e.target.value);
+  state.newPost.title = e.target.value;
 });
 
 postBody.addEventListener('change', e => {
-  if (!!state.editPost.title) {
-    return (state.editPost.body = e.target.value);
+  if (state.editPost.body) {
+    state.editPost.body = e.target.value;
+    return;
   }
 
-  return (state.newPost.body = e.target.value);
+  state.newPost.body = e.target.value;
 });
 
 addNewPost.addEventListener('click', async () => {
   try {
-    if (!!state.editPost.title || !!state.editPost.body) {
+    if (state.editPost.title || state.editPost.body) {
       await updatePostRequest();
     } else {
       await createPostRequest();
